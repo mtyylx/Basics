@@ -2,7 +2,7 @@
 /*/*/obj
 /*/*/bin/Debug
 /*/*/bin/Release
-
+*.suo
 
 # Windows image file caches
 Thumbs.db
@@ -51,6 +51,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-*.suo
-DataStructures/.vs/DataStructures/v14/.suo
-SortingAlgorithms/.vs/SortingAlgorithms/v14/.suo
+
