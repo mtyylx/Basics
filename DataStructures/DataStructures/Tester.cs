@@ -11,7 +11,7 @@ namespace DataStructures
     {
         static void Main(string[] args)
         {
-            //TreeTraversal();
+            TreeTraversal();
             //ImplementQueueUsingStack();
             //ImplementStackUsingQueue();
             //UseHash();
@@ -34,6 +34,8 @@ namespace DataStructures
             root.left.right = new TreeNode(5);
             root.right.left = new TreeNode(6);
             root.right.right = new TreeNode(7);
+
+            List<string> TreePath = root.ListBinaryTreePath(root);
 
             List<int> preResult = root.PreOrderTraversal(root);     //1, 2, 4, 5, 3, 6, 7
             List<int> preResult_i = root.PreOrderTraversal_Iterative1(root);

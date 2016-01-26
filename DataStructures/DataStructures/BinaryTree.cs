@@ -246,6 +246,29 @@ namespace DataStructures
         }
 
 
+        //List all root2leaf path in List<string>
+        public List<string> ListBinaryTreePath(TreeNode root)
+        {
+            List<string> temp;
+            List<string> result = new List<string>();
+            //Null node
+            if (root == null) return result;
+            //Leaf node
+            if(root.left == null && root.right == null)
+            {
+                result.Add(root.val + "#");
+                return result;
+            }       
+            //Recurse left subtree
+            temp = ListBinaryTreePath(root.left);
+            for (int i = 0; i < temp.Count; i++) result.Add(root.val + "->" + temp[i]);
+            //Recurse right subtree
+            temp = ListBinaryTreePath(root.right);
+            for (int i = 0; i < temp.Count; i++) result.Add(root.val + "->" + temp[i]);
+
+            return result;
+
+        }
     }
 
 
