@@ -26,7 +26,7 @@ namespace DataStructures
         public List<int> PreOrderTraversal(TreeNode root)
         {
             List<int> result = new List<int>();
-            if(root != null)
+            if (root != null)
             {
                 result.Add(root.val);
                 result.AddRange(PreOrderTraversal(root.left));
@@ -39,7 +39,7 @@ namespace DataStructures
         public List<int> InOrderTraversal(TreeNode root)
         {
             List<int> result = new List<int>();
-            if(root != null)
+            if (root != null)
             {
                 result.AddRange(InOrderTraversal(root.left));
                 result.Add(root.val);
@@ -55,7 +55,7 @@ namespace DataStructures
             if (root != null)
             {
                 result.AddRange(PostOrderTraversal(root.left));
-                result.AddRange(PostOrderTraversal(root.right));        
+                result.AddRange(PostOrderTraversal(root.right));
                 result.Add(root.val);
             }
             return result;
@@ -133,7 +133,7 @@ namespace DataStructures
                     //Iterate left child first.
                     root = root.left;
                 }
-                
+
                 else
                 {
                     //If left child does not exist anymore, extract its parent
@@ -156,7 +156,7 @@ namespace DataStructures
             //Condition 2: The root's child has already been visited.
             List<int> result = new List<int>();
             Stack<TreeNode> stack = new Stack<TreeNode>();
-            if(root != null)
+            if (root != null)
                 stack.Push(root);
             TreeNode prev = null;
             while (stack.Count != 0)
@@ -168,7 +168,7 @@ namespace DataStructures
 
                 if (prev != null && (prev == root.left || prev == root.right))
                     doneChild = true;
-               
+
                 //直到没有child了或者child已经访问完了才把栈顶元素出栈
                 if (noChild || doneChild)
                 {
@@ -246,29 +246,59 @@ namespace DataStructures
         }
 
 
+        //-------------     D F S  +  R E C U R S I V E  +  B O T T O M - U P   -------------------
+        //Solution 1: Recursion without helper function.
         //List all root2leaf path in List<string>
-        public List<string> ListBinaryTreePath(TreeNode root)
+        public List<string> ListBinaryTreePath1(TreeNode root)
         {
+            //Note that every recursion create its own "result", so what was added in lower level (recursed into) has no affect to the current level.
+            //Processed in Bottom-Up order, the current level will copy each entry (temp[i]) returned from lower level to its own result AFTER recurse bounce back.
             List<string> temp;
             List<string> result = new List<string>();
-            //Null node
+
+            //Null node (List count will remain 0 so NO value copied later.)
             if (root == null) return result;
-            //Leaf node
-            if(root.left == null && root.right == null)
+
+            //Leaf node: Add current level (only one entry) and return
+            if (root.left == null && root.right == null)
             {
-                result.Add(root.val + "#");
+                result.Add(root.val.ToString());
                 return result;
-            }       
-            //Recurse left subtree
-            temp = ListBinaryTreePath(root.left);
+            }
+
+            //Recurse left subtree: Add current level value to every entry returned from the lower level.
+            temp = ListBinaryTreePath1(root.left);
             for (int i = 0; i < temp.Count; i++) result.Add(root.val + "->" + temp[i]);
-            //Recurse right subtree
-            temp = ListBinaryTreePath(root.right);
+
+            //Recurse right subtree: Add current level value to every entry returned from the lower level.
+            temp = ListBinaryTreePath1(root.right);
             for (int i = 0; i < temp.Count; i++) result.Add(root.val + "->" + temp[i]);
 
             return result;
-
         }
+
+        //-------------     D F S  +  R E C U R S I V E  +  T O P - D O W N   -------------------
+        //Solution 2: Recursion with helper function.
+        //Key idea: While going deep during recursion, append the current node value into string "path", 
+        //But at the same time, each level of recursion kepted its own version of "path"
+        //Once reached leaf node, the "path" is done and add to string list "result"
+        //该方案利用了string类型是绝对引用而List<string>里面装的是对象所以本质上是Reference Variable的特点，
+        //用string类型的path确保每一层的path是独立的，但同时用List<string>类型的result确保所有的path都添加到一个List中并被返回
+        private void ListBinaryTreePath2_Helper(TreeNode root, string path, List<string> result)
+        {
+            if (root.left == null && root.right == null) result.Add(path + root.val);
+            if (root.left != null) ListBinaryTreePath2_Helper(root.left, path + root.val + "->", result);
+            if (root.right != null) ListBinaryTreePath2_Helper(root.right, path + root.val + "->", result);
+        }
+
+        public List<string> ListBinaryTreePath2(TreeNode root)
+        {
+            List<string> treePath = new List<string>();
+            if (root != null) ListBinaryTreePath2_Helper(root, "", treePath);
+            return treePath;
+        }
+
+
     }
 
 
